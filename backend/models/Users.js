@@ -9,7 +9,5 @@ const UserSchema = new Schema({
 });
 
 const Users=mongoose.model('Users',UserSchema);
-Users.createIndexes();
-
 
 module.exports=Users;
