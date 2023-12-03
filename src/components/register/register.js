@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link ,useLocation,useNavigate} from 'react-router-dom';
 
 const Register = () => {
   const [credentials, setCredentials] = useState({ name: '', Email: '', password: '' });
-
+  const navigate = useNavigate()
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
+  const setAuthCookie = (token) => {
+    // Set the authentication data in a cookie
+    document.cookie = `auth_token=${token}; expires=Thu, 01 Jan 2030 00:00:00 UTC; path=/`;
+  };
   const handleOnSubmit = async (e) => {
+
+ 
     e.preventDefault();
-    console.log('submit');
 
     try {
-      const response = await fetch('https://localhost:5000/api/auth/createuser', {
+      const response = await fetch('http://localhost:5000/api/auth/createuser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -21,13 +26,20 @@ const Register = () => {
         body: JSON.stringify({ name: credentials.name, Email: credentials.Email, password: credentials.password }),
       });
 
-      if (response.ok) {
-        console.log('Sign-up successful');
+     const json=await response.json()
+
+      if (json.success) {
+        console.log(json)
+        alert(json.success)
+        setAuthCookie(json.token);
+        navigate('/')
       } else {
         console.error('Sign-up failed');
+        alert(`Error: ${json.error}`)
       }
     } catch (error) {
-      console.error('Error during sign-up:', error);
+      console.error('Error during sign-up:', error.message);
+      alert(`Error during sign-up`)
     }
   };
 
@@ -35,7 +47,7 @@ const Register = () => {
     <div className="register_form">
       <form onSubmit={handleOnSubmit} className="max-w-sm mt-40 mx-auto">
         <div className="mb-5">
-          <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">
             Name
           </label>
           <input
@@ -44,13 +56,13 @@ const Register = () => {
             value={credentials.name}
             type="text"
             id="name"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5 "
             placeholder="name@flowbite.com"
             required
           />
         </div>
         <div className="mb-5">
-          <label htmlFor="Email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label htmlFor="Email" className="block mb-2 text-sm font-medium text-gray-900 ">
             Your Email
           </label>
           <input
@@ -59,13 +71,13 @@ const Register = () => {
             type="email"
             name="Email" 
             id="Email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5 "
             placeholder="name@flowbite.com"
             required
           />
         </div>
         <div className="mb-5">
-          <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">
             Your password
           </label>
           <input
@@ -74,8 +86,9 @@ const Register = () => {
             type="password"
             name="password" 
             id="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5"
             required
+            minLength={5}
           />
         </div>
         <div className="flex items-start mb-5">
@@ -94,12 +107,12 @@ const Register = () => {
         </div>
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="text-white   focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-pink-600"
         >
           Signup
         </button>
 
-        <Link to="/login" className="text-gray-800 dark:text-white hover:bg-gray-50 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none ">
+        <Link to="/login" className="text-gray-800 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2  focus:outline-none ">
           Already have an account?
         </Link>
       </form>

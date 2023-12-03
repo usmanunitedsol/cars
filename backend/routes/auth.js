@@ -15,7 +15,7 @@ router.post('/createuser',[
     body('Email').isEmail().withMessage('Not a valid e-mail address'),
     body('password').isLength({min:5}).withMessage('password must be atleast 5 characters'),
 ],async (req,res)=>{
-   
+  let success = false;
   //if there is errors send bad request
    const result = validationResult(req);
   if (!result.isEmpty()) {
@@ -28,7 +28,8 @@ router.post('/createuser',[
         let user=await Users.findOne({Email:req.body.Email});
       if(user)
       {
-        return res.status(400).json({error:"Already user exists"})
+        success = false
+        return res.status(400).json({success,error:"Already user exists"})
       }
       const salt =  bcrypt.genSaltSync(10);
       const secpassword= await bcrypt.hash( req.body.password, salt);
@@ -44,8 +45,9 @@ router.post('/createuser',[
           } 
         }
       const authData= jwt.sign(data, secretKey, { expiresIn: '1h' });
+      success = true;
       console.log(authData);
-      res.json({authData})
+      res.json({success,authData})
     
   } catch (error) {
     console.error(error.message);
@@ -62,6 +64,7 @@ router.post('/login',[
   body('password').exists().withMessage('password must not be empty'),
 ],async (req,res)=>{
   //if there is errors send bad request
+  let success = false;
   const result = validationResult(req);
   if (!result.isEmpty()) {
     return  res.status(400).json({ errors: result.array() });
@@ -73,21 +76,25 @@ router.post('/login',[
     let user=await Users.findOne({Email});
     if(!user)
     {
-      return res.status(400).json({error:"incorrect information"})
+      success = false
+      return res.status(400).json({success,error:"incorrect information"})
+      
     }
 
      comparepassword=await bcrypt.compare(password,user.password);
-
+       
      if(!comparepassword){
-      return res.status(400).json({error:"incorrect information"})
+      success = false
+      return res.status(400).json({success, error:"incorrect information"})
      }
     const data={ user:{id:user.id,} }
     const authData= jwt.sign(data, secretKey, { expiresIn: '1h' });
     console.log(authData);
-    res.json({authData})
+    success = true;
+    res.json({success,authData})
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({error:"Some error occured"})
+    res.status(500).json({success, error:"Some error occured"})
   }
 })
 
