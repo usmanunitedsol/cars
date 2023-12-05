@@ -1,7 +1,33 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import HeaderIcon from './HeaderIcon';
 
 const Navmenu = () => {
+    // console.log('selector', useSelector((state)=>state))
+    function getCookie(cookieName) {
+        // Split the cookies into an array of key-value pairs
+        const cookies = document.cookie.split(';');
+    
+        // Loop through the cookies to find the one with the specified name
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+    
+            // Check if the cookie starts with the specified name
+            if (cookie.startsWith(cookieName + '=')) {
+                // Extract and return the cookie value
+                return cookie.substring(cookieName.length + 1);
+            }
+        }
+    
+        // Return null if the cookie with the specified name is not found
+        return null;
+    }
+
+    
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const authsuccess = getCookie('success');
+    console.log(authsuccess)
   return (
     <div>
        <header>
@@ -12,9 +38,7 @@ const Navmenu = () => {
                         <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">CustomCars</span>
                     </a>
                     <div class="flex items-center lg:order-2">
-                        <Link  to="/login"class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log in</Link>
-
-                        <a href="#" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">Get started</a>
+                    <HeaderIcon/> 
                         <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mobile-menu-2" aria-expanded="false">
                             <span class="sr-only">Open main menu</span>
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>

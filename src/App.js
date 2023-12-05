@@ -5,6 +5,7 @@ import Navmenu from './components/headerWeb/Navmenu';
 import Home from './components/Home';
 import Login from './components/login/login';
 import Register from './components/register/register';
+import Account from './components/profile/Account';
 function App() {
   return (
     <>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/Account" element={<Account/>}/>
       </Routes>  
     </Router>
     </>

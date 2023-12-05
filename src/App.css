@@ -36,3 +36,60 @@
     transform: rotate(360deg);
   }
 }
+
+
+.header_icon {
+  max-width: 270px;
+}
+
+.header_icon .icon {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.header_icon .icon li {
+  position: relative;
+  display: flex;
+}
+
+.header_icon .icon li img {
+  margin-right: 10px;
+}
+
+.header_icon .icon li a {
+  font-size: 18px;
+  line-height: 26px;
+  color: #242424;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.header_icon .icon li select {
+  font-size: 18px;
+  line-height: 26px;
+  color: #242424;
+  border: 0;
+  outline: none;
+}
+
+.header_icon .icon li .cart_count {
+  position: absolute;
+  top: -10px;
+  right: -4px;
+  background-color: #242424; /* Assuming $PrimaryColor is defined */
+  width: 22px;
+  height: 22px;
+  border-radius: 25px;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  color: #fff;
+}
+
+.header_icon .icon li.resp_menu,
+.header_icon .icon li.resp_search {
+  display: none;
+}

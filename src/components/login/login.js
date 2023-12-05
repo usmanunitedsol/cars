@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link ,useLocation,useNavigate} from 'react-router-dom';
+import { useDispatch,useSelector } from 'react-redux';
+import { Link ,useNavigate} from 'react-router-dom';
 import { loginSuccess } from '../../States/action-creaters';
 const Login = () => {
   const [credentials, setCredentials] = useState({  Email: '', password: '' });
   const navigate = useNavigate()
   const dispatch = useDispatch();
+
   
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const setAuthCookie = (token) => {
+  const setAuthCookie = (token,success) => {
     // Set the authentication data in a cookie
     document.cookie = `auth_token=${token};  path=/`;
+    document.cookie = `success=${success};  path=/`;
   };
   const handleOnSubmit = async (e) => {
 
@@ -34,8 +36,8 @@ const Login = () => {
       if (json.success) {
         console.log(json)
         alert('Login successfully')
-        setAuthCookie(json.token);
-        dispatch(loginSuccess(json.token));
+        setAuthCookie(json.authData,json.success);
+        dispatch(loginSuccess(json.authData, json.success));
         navigate('/')
       } else {
         console.error('Sign-up failed');

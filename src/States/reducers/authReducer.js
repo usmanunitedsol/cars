@@ -7,15 +7,25 @@ const initialState={
 
 const reducer=(state=initialState,action)=>{
 
+    console.log(action.success)
+    
+
     if (action.type==='LOGIN_SUCCESS')
     {
-        return {
+        
+        console.log("payload",action.payload)
+        state =  {
             ...state,
-            isAuthenticated:true,
-            token:action.payload.token,
-            error:null
+            isAuthenticated:action.success,
+            token:action.payload,
+            error:null,
         }
-    }
+        console.log('New state after login:', {
+           state
+        });
+
+        return state    
+        }
     else{
         return state;
     }
