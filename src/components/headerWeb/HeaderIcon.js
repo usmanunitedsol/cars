@@ -82,11 +82,11 @@ export default function HeaderIcon() {
                   </Link>
                   <Link
                     onClick={toggleDropdown}
-                    href="/wishlist"
+                    to="/Accountupdate"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                     role="menuitem"
                   >
-                    My Wish List
+                    Update Account Info
                   </Link>
                   <Link
                     onClick={logoutUser}

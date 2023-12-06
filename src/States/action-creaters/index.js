@@ -6,3 +6,12 @@ export const loginSuccess =(token, success)=>{
         })
     }
 };
+
+export const getuserdetails =(user)=>{
+    return (dispatch)=>{
+        dispatch({
+            type: 'USER_SUCCESS',
+            payload: user
+        })
+    }
+};
