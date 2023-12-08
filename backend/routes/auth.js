@@ -113,6 +113,44 @@ router.post('/getuser',fetchuser, async (req,res)=>{
   }
 })
 
+//update a User info using:PUT "/api/auth/getuser"
+//login required
+
+router.put('/updateuserinfo/:id',async(req,res)=>{
+  try {
+    const userId = req.params.id;
+    const {name,Email}=req.body;
+    console.log(req.body)
+
+    const upadteduser={};
+    if(Email){upadteduser.Email=Email}
+    if(name){upadteduser.name=name}
+
+    
+    
+    const existingUser =await Users.findOne({Email:Email})
+
+    if (!existingUser){
+      const user=await Users.findByIdAndUpdate(userId,upadteduser,{ new: true })
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+       return  res.json({user}); 
+    }
+    else
+    {
+      return res.status(400).json({ message: 'Email already existed' });
+   
+    }
+
+  
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({error:"Some error occured"})
+  }
+})
+
 
 
 module.exports=router
