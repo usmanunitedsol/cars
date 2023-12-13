@@ -2,14 +2,13 @@
 const initialState={
     Email:"",
     name:"",
+    user_id:"",
     error:null,
 }
 
 const userreducer=(user=initialState,action)=>{
-
-    console.log(action.success)
     
-
+    console.log(user)  
     if (action.type==='USER_SUCCESS')
     {
         
@@ -18,13 +17,15 @@ const userreducer=(user=initialState,action)=>{
             ...user,
             Email:action.payload.Email,
             name:action.payload.name,
+            user_id:action.payload._id,
             error:null,
         }
         console.log('redux user:', {
             user
         });
 
-        return user    
+        return user  
+     
         }
     else{
         return user;

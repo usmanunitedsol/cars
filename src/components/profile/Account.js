@@ -12,7 +12,7 @@ const Account = () => {
 const getSomeValue = (user) => user.user;
 // console.log('selector', useSelector((state)=>state))
    const {Email,name}= useSelector(getSomeValue)
-
+ 
    function getCookie(cookieName) {
     // Split the cookies into an array of key-value pairs
     const cookies = document.cookie.split(';');
@@ -49,7 +49,7 @@ const getSomeValue = (user) => user.user;
 
 
             const json=await response.json()
-            setUSer(json.user)
+            // setUSer(json.user)
             dispatch(getuserdetails(json.user));
             if(json.user) setState(true)
             // console.log("user info here",json)
