@@ -32,12 +32,15 @@ export default function HeaderIcon() {
         const authsuccess = getCookie('success');
         const [isOpen, setIsOpen] = useState(false);
         const toggleDropdown = () => {
-            setIsOpen(!isOpen);
+            setIsOpen(!isOpen); 
           };
+
+          
 
           const logoutUser=()=>{
             setIsOpen(false);
-            clearCookie('success',"auth_token");           
+            clearCookie('success',"auth_token");  
+            localStorage.removeItem("persist:root");
             setTimeout(() => {
               navigate('/');
           }, 100); 

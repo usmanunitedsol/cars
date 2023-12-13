@@ -3,13 +3,15 @@ import Login from '../login/login';
 import { useDispatch,useSelector } from 'react-redux';
 import { getuserdetails } from '../../States/action-creaters';
 
-const Accountupdate = () => {
 
+const Accountupdate = () => {
+    const dispatch =useDispatch();
       //   const selector=useSelector();
 const getSomeValue = (user) => user.user;
 // console.log('selector', useSelector((state)=>state))
-   const {Email,name,userid}= useSelector(getSomeValue)
-    const [credentials, setCredentials] = useState({name:"",  Email: '' });
+   const {Email,name,address,phonenumber,userid}= useSelector(getSomeValue)
+    const [credentials, setCredentials] = useState({name:name,  Email: Email,address:address,phonenumber:phonenumber});
+    const isAuthenticated = useSelector((user) => user.auth.isAuthenticated);
     console.log(useSelector(getSomeValue))
    
 
@@ -27,7 +29,7 @@ const getSomeValue = (user) => user.user;
               'Content-Type': 'application/json',
               // Add any additional headers if needed
             },
-            body: JSON.stringify({name: credentials.name, Email: credentials.Email  }),
+            body: JSON.stringify({name: credentials.name, Email: credentials.Email,address:credentials.address ,phonenumber:credentials.phonenumber}),
           });
       
           if (!response.ok) {
@@ -38,19 +40,43 @@ const getSomeValue = (user) => user.user;
       
           const json = await response.json();
           console.log("cheeck here",json);
-          if (json.success) {
+          if (json) {
             console.log(json);
+            dispatch(getuserdetails(json.user));
+            alert("Successfully updated");
           } else {
             console.error('Update failed:', json.error); // Log the specific error from the server
+            alert("update failed")
           }
         } catch (error) {
           console.error('Error during fetch:', error);
+          alert("Error occured")
         }
       };
-      
 
+      function getCookie(cookieName) {
+        // Split the cookies into an array of key-value pairs
+        const cookies = document.cookie.split(';');
+    
+        // Loop through the cookies to find the one with the specified name
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+    
+            // Check if the cookie starts with the specified name
+            if (cookie.startsWith(cookieName + '=')) {
+                // Extract and return the cookie value
+                return cookie.substring(cookieName.length + 1);
+            }
+        }
+    
+        // Return null if the cookie with the specified name is not found
+        return null;
+    }
+      
+      const auth_token=getCookie('auth_token');
   return (
-  
+    <>
+    { isAuthenticated ? (
           <div className='container max-w-md m-auto mt-8'>
         <div class="bg-white overflow-hidden shadow rounded-lg border">
           <div class="px-4 py-5 sm:px-6">
@@ -72,12 +98,13 @@ const getSomeValue = (user) => user.user;
                     <input
                         onChange={handleChange}
                         value={credentials.name}
-                        type="name"
+                        type="text"
                         name="name" 
                         id="name"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5 "
                         placeholder="name"
                         required
+                      
                     />
                     </dd>
                   
@@ -105,7 +132,20 @@ const getSomeValue = (user) => user.user;
                         Phone number
                     </dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        (123) 456-7890
+          
+                    <input
+                        onChange={handleChange}
+                        value={credentials.phonenumber}
+                        type="text"
+                        name="phonenumber" 
+                        id="phonenumber"
+                        minLength={11}
+                        maxLength={11}
+                        pattern="[0-9]"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5 "
+                        placeholder="phonenumber"
+                      
+                    />
                     </dd>
                 </div>
                 <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -113,17 +153,25 @@ const getSomeValue = (user) => user.user;
                         Address
                     </dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        123 Main St<br/>
-                        Anytown, USA 12345
+                    <input
+                        onChange={handleChange}
+                        value={credentials.address}
+                        type="text"
+                        name="address" 
+                        id="address"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5 "
+                        placeholder="address"
+                      
+                    />
                     </dd>
                 </div>
 
-                <div>
+                <div className='text-center'>
                 <button
           type="submit"
-          className="text-white   focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-pink-600"
+          className="text-white my-8  focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-pink-600"
         >
-          Login
+          Update information
         </button>
                 </div>
                 
@@ -131,8 +179,8 @@ const getSomeValue = (user) => user.user;
         </div>
         </form>
     </div>
-        </div>
-
+        </div>):( <Login/> )}
+        </>
   )
 }
 

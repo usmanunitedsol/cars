@@ -19,6 +19,8 @@ const userreducer=(user=initialState,action)=>{
             ...user,
             Email:action.payload.Email,
             name:action.payload.name,
+            phonenumber:action.payload.phonenumber,
+            address:action.payload.address,
             userid:action.payload._id,
             error:null,
         }

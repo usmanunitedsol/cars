@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { Link ,useNavigate} from 'react-router-dom';
-import { loginSuccess } from '../../States/action-creaters';
+import { getuserdetails, loginSuccess } from '../../States/action-creaters';
 const Login = () => {
   const [credentials, setCredentials] = useState({  Email: '', password: '' });
   const navigate = useNavigate()
@@ -38,6 +38,7 @@ const Login = () => {
         alert('Login successfully')
         setAuthCookie(json.authData,json.success);
         dispatch(loginSuccess(json.authData, json.success));
+        dispatch(getuserdetails(json.userDetail));
         navigate('/')
       } else {
         console.error('Sign-up failed');
@@ -48,6 +49,8 @@ const Login = () => {
       alert(`Error during sign-up`)
     }
   };
+
+  
 
   return (
     <div className='login_form'>

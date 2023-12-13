@@ -38,6 +38,9 @@ router.post('/createuser',[
         name:req.body.name,
         password:secpassword,
         Email:req.body.Email,
+        phonenumber:req.body.phonenumber,
+        address:req.body.address,
+ 
       });
       const data={
         user:{
@@ -88,10 +91,11 @@ router.post('/login',[
       return res.status(400).json({success, error:"incorrect information"})
      }
     const data={ user:{id:user.id,} }
+    const userDetail = await Users.findOne({Email}).select("-password")
     const authData= jwt.sign(data, secretKey, { expiresIn: '1h' });
     console.log(authData);
     success = true;
-    res.json({success,authData})
+    res.json({success,authData, userDetail})
   } catch (error) {
     console.error(error.message);
     res.status(500).json({success, error:"Some error occured"})
@@ -120,11 +124,15 @@ router.put('/updateuserinfo/:id',async(req,res)=>{
   try {
     const userId = req.params.id;
     const {name}=req.body;
+    const {phonenumber}=req.body;
+    const {address}=req.body;
     console.log(req.body)
 
     const upadteduser={};
  
     if(name){upadteduser.name=name}
+    if(phonenumber){upadteduser.phonenumber=phonenumber}
+    if(address){upadteduser.address=address}
 
       const user=await Users.findByIdAndUpdate(userId,upadteduser,{ new: true })
      
