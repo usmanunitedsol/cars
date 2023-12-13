@@ -2,6 +2,7 @@
 const initialState={
     Email:"",
     name:"",
+    userid:"",
     error:null,
 }
 
@@ -18,6 +19,7 @@ const userreducer=(user=initialState,action)=>{
             ...user,
             Email:action.payload.Email,
             name:action.payload.name,
+            userid:action.payload._id,
             error:null,
         }
         console.log('redux user:', {

@@ -8,33 +8,46 @@ const Accountupdate = () => {
       //   const selector=useSelector();
 const getSomeValue = (user) => user.user;
 // console.log('selector', useSelector((state)=>state))
-   const {Email,name,_id}= useSelector(getSomeValue)
+   const {Email,name,userid}= useSelector(getSomeValue)
     const [credentials, setCredentials] = useState({name:"",  Email: '' });
     console.log(useSelector(getSomeValue))
-    console.log("id", _id)
+   
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
       };
     
-    const handleOnSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        const response =await fetch(`http://localhost:5000/api/auth/updateuserinfo/6567207891173c1258e59c13`,{
+      const handleOnSubmit = async (e) => {
+        e.preventDefault();
+        try {
+           
+          const response = await fetch(`http://localhost:5000/api/auth/updateuserinfo/${userid}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ Email: credentials.Email, password: credentials.password }), 
-        });
-        const json=await response.json()
-        if (json.success) {
-            console.log(json)
+              'Content-Type': 'application/json',
+              // Add any additional headers if needed
+            },
+            body: JSON.stringify({name: credentials.name, Email: credentials.Email  }),
+          });
+      
+          if (!response.ok) {
+            // Handle non-successful responses
+            console.error(`HTTP error! Status: ${response.status}`);
+            return;
+          }
+      
+          const json = await response.json();
+          console.log("cheeck here",json);
+          if (json.success) {
+            console.log(json);
+          } else {
+            console.error('Update failed:', json.error); // Log the specific error from the server
+          }
+        } catch (error) {
+          console.error('Error during fetch:', error);
         }
-      } catch (error) {
-        
-      }
-    }
+      };
+      
 
   return (
   
