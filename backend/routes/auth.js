@@ -106,7 +106,7 @@ router.post('/login',[
 //login a User using:POST "/api/auth/getuser"
 //login required
 
-router.post('/getuser',fetchuser, async (req,res)=>{
+router.get('/getuser',fetchuser, async (req,res)=>{
   try {
       const  userId=req.user.id;
       const user=await Users.findById(userId).select("-password")

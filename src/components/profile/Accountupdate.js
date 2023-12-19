@@ -17,6 +17,15 @@ const getSomeValue = (user) => user.user;
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
+        
+      };
+
+      const handleKeyPressPhoneNumber = (e) => {
+        // Allow only numeric key presses
+        const isNumeric = /^\d+$/;
+        if (!isNumeric.test(e.key)) {
+          e.preventDefault();
+        }
       };
     
       const handleOnSubmit = async (e) => {
@@ -138,10 +147,9 @@ const getSomeValue = (user) => user.user;
                         value={credentials.phonenumber}
                         type="text"
                         name="phonenumber" 
+                        onKeyPress={handleKeyPressPhoneNumber}
                         id="phonenumber"
-                        minLength={11}
                         maxLength={11}
-                        pattern="[0-9]"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5 "
                         placeholder="phonenumber"
                       
