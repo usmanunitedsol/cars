@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const CarsSchema = new Schema({
-  user: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref:"Users" },
-  category: { type: String, required: true,},
+
+const CarsSchema = new mongoose.Schema({
+  Categorie: { type: Schema.Types.ObjectId, ref: "Categorie" },
   car: { type: String, required: true },
   color: { type: String, required: true},
   model:{ type: String, required: true},
