@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchuser');
 const Cars = require('../models/Cars');
 const Categorie = require('../models/Categories');
+const getCategory = require('../middleware/getCategory');
 
 //Route :1: Get all the cars using get "/api/cars/getCars". login required
 router.get('/fetchcars',fetchuser, async (req,res)=>{
@@ -33,8 +34,9 @@ router.post('/addCategory',[
   try {
       const  user=req.user.id;
       const {title}=req.body;
-      const isregistered=await Cars.findOne({title:title});
+      const isregistered=await Categorie.findOne({title:title});
       console.log(title)
+      console.log(isregistered)
       if(isregistered)
       {
          return res.status(400).json({error:"Category is already registered with same name"})
@@ -60,7 +62,7 @@ router.post('/addcar',[
     body('model').exists().withMessage('add the car model'),
     body('make').exists().withMessage('add the car make'),
     body('registration_num').exists().withMessage('add the color  registration number'),
- ],fetchuser, async (req,res)=>{
+ ],fetchuser,getCategory, async (req,res)=>{
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -68,7 +70,8 @@ router.post('/addcar',[
     }
     try {
         const  user=req.user.id;
-        const {category,car,color,model,make,registration_num}=req.body;
+        const category=req.title.id;
+        const {color,model,make,registration_num}=req.body;
         const isregistered=await Cars.findOne({ registration_num: registration_num });
         console.log(isregistered)
         if(isregistered)
@@ -88,5 +91,7 @@ router.post('/addcar',[
       res.status(500).json({error:"Some error occured"})
     }
   })
+
+
 
   module.exports=router
