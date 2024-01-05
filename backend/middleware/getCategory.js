@@ -1,3 +1,4 @@
+const Categorie = require("../models/Categories");
 
 const getCategory =async(req,res,next)=>{
 

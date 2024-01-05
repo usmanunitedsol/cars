@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 
 const CarsSchema = new mongoose.Schema({
-  Categorie: { type: [Schema.Types.ObjectId], ref: "Categorie" },
+  Category: { type: String, required: true },
+  user: {  type: [Schema.Types.ObjectId],ref:"Users" },
   car: { type: String, required: true },
   color: { type: String, required: true},
   model:{ type: String, required: true},
@@ -14,4 +15,4 @@ const CarsSchema = new mongoose.Schema({
 
 const Cars=mongoose.model('Cars',CarsSchema);
 
-module.exports=Cars;
+module.exports=Cars;        

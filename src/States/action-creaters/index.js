@@ -16,3 +16,12 @@ export const getuserdetails =(user)=>{
     }
 };
 
+export const getcardetails =(car)=>{
+    return (dispatch)=>{
+        dispatch({
+            type: 'CAR_SUCCESS',
+            payload: car
+        })
+    }
+};
+

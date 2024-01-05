@@ -4,13 +4,13 @@ const Cars = require("./Cars.js");
 const { Schema } = mongoose;
 
 
-const CategorieSchema = new Schema({
+const  CategorySchema = new Schema({
 
   title: { type: String, required: true,unique:true},
   user: {  type: [Schema.Types.ObjectId],ref:"Users" },
   date: { type: Date, default: Date.now },
 });
 
-const Categorie=mongoose.model('Categorie',CategorieSchema);
+const   Category=mongoose.model('Category',CategorySchema);
 
-module.exports=Categorie;
+module.exports=  Category; 
