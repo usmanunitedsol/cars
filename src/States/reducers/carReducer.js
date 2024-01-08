@@ -25,12 +25,12 @@ const carreducer=(cars=initialState,action)=>{
             cars =  [{
                 ...cars,
                 Category:car.Category,
-                car:action.payload.car,
-                color:action.payload.color,
-                make:action.payload.make,
-                model:action.payload.model,
-                registration_num:action.payload.registration_num,
-                carid:action.payload._id,
+                car:car.car,
+                color:car.color,
+                make:car.make,
+                model:car.model,
+                registration_num:car.registration_num,
+                carid:car._id,
                 error:null,
             }]
             

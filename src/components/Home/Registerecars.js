@@ -4,10 +4,15 @@ import { getcardetails } from '../../States/action-creaters';
 
 const Registerecars = () => {
   const dispatch =useDispatch();
-  const getSomeValue = (user) => user.user;
+  const getSomeValue = (user) => user;
    const user=  useSelector(getSomeValue) ;
-  const  userId= user.userid;
- console.log(userId);
+  const  userId= user.user.userid;
+
+  const car=user.car
+ 
+  console.log(car.length);
+
+   
   useEffect(() => {
     console.log(userId);
     const fetchcars = async () => {
@@ -50,7 +55,7 @@ const Registerecars = () => {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-indigo-500 text-white p-6 rounded-md shadow-md">
                     <h2 class="text-lg font-semibold mb-2">Total Registered Cars</h2>
-                    <p class="text-3xl font-bold">123</p>
+                    <p class="text-3xl font-bold">{car.length}</p>
                 </div>
             </div>
         </div>
