@@ -40,10 +40,11 @@ export default function HeaderIcon() {
           const logoutUser=()=>{
             setIsOpen(false);
             clearCookie('success',"auth_token");  
-            localStorage.removeItem("persist:root");
+    
             setTimeout(() => {
-              navigate('/');
+              navigate('/login');
           }, 100); 
+          localStorage.removeItem("persist:root");
              }
  
  
