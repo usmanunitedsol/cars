@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const CarsSchema = new mongoose.Schema({
   Category: { type: String, required: true },
-  user: {  type: [Schema.Types.ObjectId],ref:"Users" },
+  user: {  type: [Schema.Types.ObjectId],ref:"Users" }, 
   car: { type: String, required: true },
   color: { type: String, required: true},
   model:{ type: String, required: true},

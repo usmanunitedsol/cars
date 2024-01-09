@@ -32,7 +32,8 @@ const carreducer=(cars=initialState,action)=>{
                 registration_num:car.registration_num,
                 carid:car._id,
                 error:null,
-            }]
+            }
+            ]
             
         })
         console.log('redux car:', {

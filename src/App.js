@@ -7,12 +7,16 @@ import Login from './components/login/login';
 import Register from './components/register/register';
 import Account from './components/profile/Account';
 import Accountupdate from './components/profile/Accountupdate';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const getSomeValue = (user) => user.user;
+  const isAuthenticated = useSelector((user) => user.auth.isAuthenticated);
+  console.log("isAuthenticated:", isAuthenticated);
   return (
     <>
-    <Router>  
-    <Navmenu />
+     <Router>  
+     <Navmenu />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login/>} />
