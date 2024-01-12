@@ -7,6 +7,7 @@ import Login from './components/login/login';
 import Register from './components/register/register';
 import Account from './components/profile/Account';
 import Accountupdate from './components/profile/Accountupdate';
+import Categories from './components/Categories/index'
 import { useSelector } from 'react-redux';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/register" element={<Register/>} />
         <Route path="/Account" element={<Account/>}/>
         <Route path="/Accountupdate" element={<Accountupdate/>}/>
+        <Route path='/Categories' element={<Categories/>} />
       </Routes>  
     </Router>
     </>

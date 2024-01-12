@@ -25,3 +25,12 @@ export const getcardetails =(car)=>{
     }
 };
 
+export const getcategories =(categories)=>{
+    return (dispatch)=>{
+        dispatch({
+            type: 'CATEGORIES_SUCCESS',
+            payload: categories
+        })
+    }
+};
+

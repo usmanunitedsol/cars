@@ -24,9 +24,9 @@ router.get('/fetchcars', async (req, res) => {
 
 
   //Route :1: Get all the categories using get "/api/cars/get". login required
-router.get('/fetchcategories',fetchuser, async (req,res)=>{
+router.get('/fetchcategories', async (req,res)=>{
   try {
-      const  userId=req.user.id;
+    const userId = req.query.userId;
       const categories=await Category.find({user:userId})
       console.log('Fetching categories for user:', userId);
       console.log('Found cars:', categories);
@@ -40,14 +40,14 @@ router.get('/fetchcategories',fetchuser, async (req,res)=>{
 //Route :2: add the categories using post "/api/cars/addCategory". login required
 router.post('/addCategory',[
   body('title').exists().withMessage('add the category name'),
-],fetchuser, async (req,res)=>{
+], async (req,res)=>{
 
   const result = validationResult(req);
   if (!result.isEmpty()) {
     return  res.status(400).json({ errors: result.array() });
   }
   try {
-      const  user=req.user.id;
+       const user = req.query.userId;
       const {title}=req.body;
       const isregistered=await Category.findOne({title:title});
       console.log(title)

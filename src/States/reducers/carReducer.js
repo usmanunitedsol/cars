@@ -21,9 +21,7 @@ const carreducer=(cars=initialState,action)=>{
         
         console.log("payload",action.payload)
         const carsArray = action.payload.cars;
-        carsArray.map((car)=>{
-            cars =  [{
-                ...cars,
+        const updatearray= carsArray.map((car)=>({            
                 Category:car.Category,
                 car:car.car,
                 color:car.color,
@@ -32,15 +30,12 @@ const carreducer=(cars=initialState,action)=>{
                 registration_num:car.registration_num,
                 carid:car._id,
                 error:null,
-            }
-            ]
-            
-        })
+        }))
         console.log('redux car:', {
-            cars
+            updatearray
         });
 
-        return cars  
+        return updatearray  
         }
     else{
         return cars;

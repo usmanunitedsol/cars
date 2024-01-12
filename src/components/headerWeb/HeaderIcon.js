@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import AccountIcon from './AccountIcon';
 import { Link, useNavigate, useNavigation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getuserdetails, loginSuccess } from '../../States/action-creaters';
 
 
 export default function HeaderIcon() {
@@ -24,6 +26,7 @@ export default function HeaderIcon() {
             // Return null if the cookie with the specified name is not found
             return null;
         }
+        const dispatch = useDispatch();
        async  function clearCookie(name,auth_token) {
           document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
           document.cookie = auth_token + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -42,9 +45,13 @@ export default function HeaderIcon() {
             clearCookie('success',"auth_token");  
     
             setTimeout(() => {
+         
+              dispatch(loginSuccess( null, false));   
+              dispatch(getuserdetails(""));    
+              localStorage.removeItem("persist:root");
               navigate('/login');
           }, 100); 
-          localStorage.removeItem("persist:root");
+
              }
  
  
