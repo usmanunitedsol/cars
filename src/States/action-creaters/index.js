@@ -33,4 +33,11 @@ export const getcategories =(categories)=>{
         })
     }
 };
+export const logoutuser =()=>{
+    return (dispatch)=>{
+        dispatch({
+            type: 'logoutuser',
+        })
+    }
+};
 

@@ -23,9 +23,21 @@ const reducer=(state=initialState,action)=>{
    
         return state    
         }
+  
+
+    else if(action.type=='logoutuser')
+    {
+        state =  initialState
+   
+        return state   
+    }
+
     else{
         return state;
     }
+
 }
+
+
 
 export default reducer;

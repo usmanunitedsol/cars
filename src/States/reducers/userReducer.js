@@ -30,6 +30,15 @@ const userreducer=(user=initialState,action)=>{
 
         return user    
         }
+
+        
+    else if(action.type=='logoutuser')
+    {
+        user =  initialState
+   
+        return user   
+    }
+
     else{
         return user;
     }

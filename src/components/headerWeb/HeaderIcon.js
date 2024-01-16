@@ -3,7 +3,7 @@ import { useState } from 'react'
 import AccountIcon from './AccountIcon';
 import { Link, useNavigate, useNavigation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getuserdetails, loginSuccess } from '../../States/action-creaters';
+import { getcardetails, getuserdetails, loginSuccess, logoutuser } from '../../States/action-creaters';
 
 
 export default function HeaderIcon() {
@@ -46,9 +46,8 @@ export default function HeaderIcon() {
     
             setTimeout(() => {
          
-              dispatch(loginSuccess( null, false));   
-              dispatch(getuserdetails(""));    
-              localStorage.removeItem("persist:root");
+              dispatch(logoutuser());   
+              localStorage.removeItem("root");
               navigate('/login');
           }, 100); 
 

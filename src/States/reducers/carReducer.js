@@ -37,6 +37,13 @@ const carreducer=(cars=initialState,action)=>{
 
         return updatearray  
         }
+        
+    else if(action.type=='logoutuser')
+    {
+        cars =  initialState
+   
+        return cars   
+    }
     else{
         return cars;
     }

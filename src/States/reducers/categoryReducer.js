@@ -14,21 +14,28 @@ const categoryreducer=(category=initialState,action)=>{
     if (action.type==='CATEGORIES_SUCCESS')
     {
         
-        console.log("payload category",action.payload)
-        const categoryArray = action.payload.category;
-        const updatearray= categoryArray.map((category)=>({            
-                title:category.title,
-                user:category.user,
-                error:null,
-        }))
-        console.log('redux car:', {
-            updatearray
-        });
+       console.log("payload category",action.payload)
+     const  category= action.payload.categories;
+       const newCategory= category.map((item)=>({  
+                id:item._id, 
+                title:item.title,
+                user:item.user,
+                error:null,  }));
 
-        return updatearray  
+        console.log('redux categoryes:',  {newCategory});
+
+        return newCategory  
         }
-    else{
-        return category;}
+        else if(action.type=='logoutuser')
+        {
+            category =  initialState
+    
+            return category   
+        }
+
+       else{
+        return category;
+       }
 }
 
 export default   categoryreducer;
