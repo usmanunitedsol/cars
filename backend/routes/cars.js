@@ -96,6 +96,7 @@ router.post('/addcar',[
         {
            return res.status(400).json({error:"Car is already registered with same number"})
         }
+        else{
         const newCar=new Cars({
           Category,car,color,model,make,registration_num , user
         })
@@ -103,6 +104,7 @@ router.post('/addcar',[
         const savecar=await newCar.save();
         console.log('Saved Car:', savecar);
         res.json({cars:savecar});
+      }
          
     } catch (error) {
       console.error(error.message);

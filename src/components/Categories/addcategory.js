@@ -25,7 +25,7 @@ const Addcategory = () => {
     
          const json=await response.json()
     
-          if (json) {
+          if (!json.error) {
             console.log(json)
             alert('category added successfully')
             setCategory({title:""});
