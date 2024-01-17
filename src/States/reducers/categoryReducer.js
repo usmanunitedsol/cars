@@ -1,6 +1,7 @@
 
 const initialState=[
     {
+    _id:"",      
     title:"",
     user:"",
     }
@@ -17,7 +18,7 @@ const categoryreducer=(category=initialState,action)=>{
        console.log("payload category",action.payload)
      const  category= action.payload.categories;
        const newCategory= category.map((item)=>({  
-                id:item._id, 
+                _id:item._id, 
                 title:item.title,
                 user:item.user,
                 error:null,  }));

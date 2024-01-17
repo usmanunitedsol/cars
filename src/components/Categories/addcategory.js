@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+
+
 const Addcategory = () => {
     const [Categories, setCategory] = useState({  title: ''});
     const getSomeValue = (user) => user;

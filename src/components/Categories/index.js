@@ -18,27 +18,98 @@ const CategoryPage = () => {
         const  userId= user.user.userid;
         const  usercategory= user.category;
 
-        const [filteredCountries, setfilteredCountries] = useState([usercategory])
+        const [filteredcategory, setfilteredcategory] = useState([usercategory])
         const [isOpen, setIsOpen] = useState(false);
+        const [deletecategory, setdeletecategory] = useState(false);
+        const [categoryid, setcategoryid] = useState()
+        const [Categories, setCategory] = useState({  title: ''});
+        const [updatecategory, setupdatecategory] = useState(false)
 
-        const openPopup = () => {
+        const openPopup = async (catid) => {
+          setcategoryid(catid)
           setIsOpen(true);
         };
-          const closePopup = () => {
+        
+          const closePopup =async () => {
+            try {
+   
+              const response = await fetch(`http://localhost:5000/api/cars/updatecategory/${categoryid}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  // Add any additional headers if needed
+                },
+                body: JSON.stringify({title:Categories.title}),
+              });
+          
+              if (!response.ok) {
+                // Handle non-successful responses
+                console.error(`HTTP error! Status: ${response.status}`);
+                return;
+              }
+
+              console.log("test res",response)
+          
+              const json = await response.json();
+              console.log("updated",json);
+              if (json) {
+                console.log(json);
+                alert("Successfully updated");
+                setupdatecategory(true)
+                setCategory({title:""})
+           
+              } else {
+                console.error('Update failed:', json.error); // Log the specific error from the server
+                alert("update failed")
+              }
+            } catch (error) {
+              console.error('Error during fetch:', error);
+              alert("Error occured")
+            }
+         
             setIsOpen(false);
           };
 
         console.log("categories", usercategory)
+
+        const ondelete =async (catid) => {
+          try {
+            const response =await fetch (`http://localhost:5000/api/cars/deletecategory/${catid}`,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            if(!response.ok){
+                // Handle non-successful responses
+                console.error(`HTTP error! Status: ${response.status}`);
+                return;
+            }
+               
+            alert("Category deleted")
+              setdeletecategory(true)
+
+            
+        } catch (error) {
+            console.error('Error during fetch:', error);
+            alert("Error occured")
+        }
+        };
     
       useEffect(() => {
              fetchcategories();
-      }, [])
+             setdeletecategory(false)
+             setupdatecategory(false)
+             
+      }, [deletecategory,updatecategory])
 
       useEffect(() => {
           const result= usercategory.filter((category)=>{
                  return  category.title.toLowerCase().match(search.toLowerCase())
           })
-          setfilteredCountries(result)
+          setfilteredcategory(result)
+          console.log(result)
       }, [search])
       
 
@@ -61,7 +132,7 @@ const CategoryPage = () => {
             console.log("categories here",categories);
 
             dispatch(getcategories(categories));
-            setfilteredCountries(categories.categories)
+            setfilteredcategory(categories.categories)
 
             
         } catch (error) {
@@ -85,11 +156,11 @@ const CategoryPage = () => {
           name: 'Action',
           cell: row =>  
           <div className='flex gap-2'>
-            <button   onClick={openPopup}> 
+            <button   onClick={() => openPopup(row._id)}> 
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z"/></svg>
             </button>
 
-            <button   onClick={""}><svg
+            <button   onClick={() => ondelete(row._id)}><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               width="24"
@@ -122,7 +193,7 @@ const CategoryPage = () => {
            fixedHeader 
            fixedHeaderScrollHeight='800px'
            columns={columns}  
-           data={filteredCountries}
+           data={filteredcategory}
            selectableRows 
            pagination
            actions={<Link to='/addcategory' className='border p-3 text-lg rounded-lg'>Add new Category</Link>}
@@ -130,7 +201,7 @@ const CategoryPage = () => {
            subHeaderComponent={ <input type='text' placeholder='Seach here' onChange={(e)=>setsearch(e.target.value)} value={search} className='w-1/4 border p-3 outline-none rounded-lg'/>}
            />
          </div>
-         <Popup isOpen={isOpen} closePopup={closePopup} />
+         <Popup isOpen={isOpen} setCategory={setCategory} Categories={Categories} closePopup={closePopup} />
     </div>
     
   );

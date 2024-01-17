@@ -111,5 +111,56 @@ router.post('/addcar',[
   })
 
 
+  //update a User info using:PUT "/api/auth/getuser"
+//login required
+
+router.put('/updatecategory/:id',async(req,res)=>{
+  try {
+    const catId = req.params.id;
+    console.log("param id", catId)
+    const {title}=req.body
+    console.log("cat test", req.body)
+    const upadtedcategory={};
+ 
+    if(title){upadtedcategory.title=title}
+
+
+      const category=await Category.findByIdAndUpdate(catId,upadtedcategory,{ new: true })
+
+         console.error(category);
+       return  res.json({category}); 
+    
+
+  } catch (error) {
+    console.error(error.message);
+     res.status(500).json({error:"Some error occured"})
+  }
+})
+
+
+
+  //delete a category info using:delete "/api/auth/deltecategory"
+//login required
+
+router.delete('/deletecategory/:id',async(req,res)=>{
+  try {
+    const catId = req.params.id;
+
+
+
+      const category=await Category.findByIdAndDelete(catId)
+
+       console.log("Deleted category",category);
+       return  res.json({category}); 
+    
+
+  } catch (error) {
+    console.error(error.message);
+     res.status(500).json({error:"Some error occured"})
+  }
+})
+
+
+
 
   module.exports=router

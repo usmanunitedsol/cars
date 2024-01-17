@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
-const Popup = ({ isOpen, closePopup }) => {
-    const [Categories, setCategory] = useState({  title: ''});
+const Popup = ({ isOpen, closePopup ,setCategory,Categories }) => {
+
     const handleChange = (e) => {
-        setCategory({[e.target.name]: e.target.value });
+        setCategory({...Categories,[e.target.name]: e.target.value });
       };
 //   const closePopup = () => {
 //     setIsOpen(false);
 //   };
+
+  
 
   return (
     <div className="flex items-center justify-center h-screen">
