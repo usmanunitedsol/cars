@@ -12,18 +12,22 @@ import Carpopup from './popup';
 const Cars = () => {
  
         const [search, setsearch] = useState("")
+      
        
         const dispatch =useDispatch();
         const getSomeValue = (user) => user;
         const user=  useSelector(getSomeValue) ;
         const  userId= user.user.userid;
         const  usercategory= user.category;
+        const car=user.car
 
-        const [filteredcategory, setfilteredcategory] = useState([usercategory])
+        console.log("test car" , car)
+
+        const [filteredcar, setfilteredcar] = useState([car])
         const [isOpen, setIsOpen] = useState(false);
         const [deletecategory, setdeletecategory] = useState(false);
         const [categoryid, setcategoryid] = useState()
-        const [Categories, setCategory] = useState({  title: ''});
+        const [Categories, setCategory] = useState(""); 
         const [updatecategory, setupdatecategory] = useState(false)
 
         // const openPopup = async (catid) => {
@@ -71,7 +75,10 @@ const Cars = () => {
         //     setIsOpen(false);
         //   };
 
-        console.log("categories", usercategory)
+        const handleCategoryChange = (e) => {
+          setCategory(e.target.value)
+        }
+        console.log("categories", Categories)
 
         const ondelete =async (catid) => {
         //   try {
@@ -98,60 +105,68 @@ const Cars = () => {
         // }
         };
     
-      useEffect(() => {
-             fetchcar();
+      // useEffect(() => {
+      //        fetchcar();
 
              
-      }, [])
+      // }, [])
 
       useEffect(() => {
-          const result= usercategory.filter((category)=>{
-                 return  category.title.toLowerCase().match(search.toLowerCase())
+          const result= car.filter((cars)=>{
+                 return   Categories === '' || (cars.category && cars.category.toLowerCase() === Categories.toLowerCase()) || (Categories==='allcategory' && cars )
+               
           })
-          setfilteredcategory(result)
+          setfilteredcar(result)
           console.log(result)
-      }, [search])
+      }, [ Categories])
+
       
 
-      const fetchcar = async ()=>{
-        try {
-            const response =await fetch (`http://localhost:5000/api/cars/fetchcars?userId=${userId}`,{
-                method:'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-            })
+      useEffect(() => {
+        const result= car.filter((cars)=>{
+               return  cars.car.toLowerCase().match(search.toLowerCase());
+        })
+        setfilteredcar(result)
+        console.log(result)
+    }, [search])
+      
 
-            if(!response.ok){
-                // Handle non-successful responses
-                console.error(`HTTP error! Status: ${response.status}`);
-                return;
-            }
-
-            const cars=await response.json();
-            console.log("categories here",cars);
-            dispatch(getcardetails(cars));        
-            // dispatch(getcategories(categories));
-            setfilteredcategory(cars.cars)
-
-            
-        } catch (error) {
-            console.error('Error during fetch:', error);
-            alert("Error occured")
-        }
-      }
+     
 
 
       const columns = [
         {
-          name: 'ID',
-          selector: row => row._id,
+          name: 'Category',
+          selector: row => row.category || 'NONE',
         },
         {
           name: 'CAR',
           selector: row => row.car,
           sortable: true,
         },
+
+        {
+          name: 'COLOUR',
+          selector: row => row.color,
+          sortable: true,
+        },
+        
+        {
+          name: 'MAKE',
+          selector: row => row.make,
+          sortable: true,
+        },
+        {
+          name: 'MODEL',
+          selector: row => row.model,
+          sortable: true,
+        },
+        {
+          name: 'Registrantion Number',
+          selector: row => row.registration_num ,
+          sortable: true, 
+        },
+
         {
           name: 'Action',
           cell: row =>  
@@ -193,10 +208,26 @@ const Cars = () => {
            fixedHeader 
            fixedHeaderScrollHeight='800px'
            columns={columns}  
-           data={filteredcategory}
+           data={filteredcar}
            selectableRows 
            pagination
-           actions={<Link to='/addcategory' className='border p-3 text-lg rounded-lg'>Add new Car</Link>}
+           actions={
+            <>
+               <div className='flex gap-6'>
+                <select className='outline-none border text-lg rounded-lg px-2 hover:cursor-pointer'  onChange={handleCategoryChange}>
+                     <option value="allcategory" className='cursor-pointer'  selected>ALL Category</option>
+                  {
+                    usercategory.map((item)=>(
+                      <option  value={item.title}  key={item._id}>{item.title}</option>
+                    ))
+                    
+                  }              
+                </select>
+              <Link to='/AddCar' className='border p-3 text-lg rounded-lg'>Add new Car</Link>
+              </div>
+          
+            </>
+          }
            subHeader
            subHeaderComponent={ <input type='text' placeholder='Seach here' onChange={(e)=>setsearch(e.target.value)} value={search} className='w-1/4 border p-3 outline-none rounded-lg'/>}
            />

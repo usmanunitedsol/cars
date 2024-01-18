@@ -11,9 +11,40 @@ const Registerecars = () => {
   const car=user.car
  
   console.log(car.length);
+  
+  useEffect(() => {
+    fetchcar();
 
+    
+}, [])
    
- 
+  const fetchcar = async ()=>{
+    try {
+        const response =await fetch (`http://localhost:5000/api/cars/fetchcars?userId=${userId}`,{
+            method:'GET',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+        })
+
+        if(!response.ok){
+            // Handle non-successful responses
+            console.error(`HTTP error! Status: ${response.status}`);
+            return;
+        }
+
+        const cars=await response.json();
+        console.log("categories here",cars.cars);
+        dispatch(getcardetails(cars.cars));        
+        // dispatch(getcategories(categories));
+
+
+        
+    } catch (error) {
+        console.error('Error during fetch:', error);
+        alert("Error occured")
+    }
+  }
   
   return (
     <div className='container  m-auto mt-8'>

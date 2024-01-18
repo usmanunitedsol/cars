@@ -69,27 +69,27 @@ router.post('/addCategory',[
     res.status(500).json({error:"Some error occured"})
   }
 })
-
+ 
 
 
   //Route :2: add the cars using get "/api/cars/addCars". login required
 router.post('/addcar',[
     body('car').exists().withMessage('add the car name'),
     body('color').exists().withMessage('add the car name'),
-    body('Category').exists().withMessage('add the car category'),
+    body('category').exists().withMessage('add the car category'),
     body('model').exists().withMessage('add the car model'),
     body('make').exists().withMessage('add the car make'),
     body('registration_num').exists().withMessage('add the color  registration number'),
- ],fetchuser, async (req,res)=>{
+ ], async (req,res)=>{
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
       return  res.status(400).json({ errors: result.array() });
     }
     try {
-        const  user=req.user.id;
+         const user = req.query.userId;
         // const category=req.title.id;
-        const {Category,car,color,model,make,registration_num}=req.body;
+        const {category,car,color,model,make,registration_num}=req.body;
         const isregistered=await Cars.findOne({ registration_num: registration_num });
         console.log(isregistered)
         if(isregistered)
@@ -98,7 +98,7 @@ router.post('/addcar',[
         }
         else{
         const newCar=new Cars({
-          Category,car,color,model,make,registration_num , user
+          category,car,color,model,make,registration_num ,user
         })
 
         const savecar=await newCar.save();
@@ -112,6 +112,64 @@ router.post('/addcar',[
     }
   })
 
+    //delete a category info using:delete "/api/auth/deltecategory"
+//login required
+
+router.delete('/deletecar/:id',async(req,res)=>{
+  try {
+      const catId = req.params.id;
+      console.log('catId ', catId)
+      const deletedcar=await Cars.deleteOne( {'registration_num' : catId})
+      console.log("Deleted car",deletedcar);
+       return  res.json({deletedcar}); 
+    
+
+  } catch (error) {
+    console.error(error.message);
+     res.status(500).json({error:"Some error occured"})
+  }
+})
+
+
+  //update a car info using:PUT "/api/auth/getuser"
+//login required
+
+router.put('/updatecar/:id',async(req,res)=>{
+  try {
+    const catId = req.params.id;
+    console.log("param id", catId)
+    const {category,car,color,model,make,registration_num}=req.body
+    console.log("cat test", req.body)
+    const newcar={};
+
+    // Check if the new registration_num is already registered
+    const existingCar = await Cars.findOne({ registration_num: registration_num });
+    if (existingCar && existingCar._id != catId) {
+      // If the registration_num is already registered for another car
+      return res.status(400).json({ error: "Registration number is already registered for another car" });
+    }
+ 
+    if(category){newcar.category=category}
+    if(car){newcar.car=car}
+    if(color){newcar.color=color}
+    if(model){newcar.model=model}
+    if(make){newcar.make=make}
+    if(registration_num){newcar.registration_num=registration_num}
+
+    
+
+
+      const updatedcar=await  Cars.findByIdAndUpdate(catId,newcar,{ new: true })
+
+         console.error(updatedcar);
+       return  res.json({updatedcar}); 
+    
+
+  } catch (error) {
+    console.error(error.message);
+     res.status(500).json({error:"Some error occured"})
+  }
+})
 
   //update a User info using:PUT "/api/auth/getuser"
 //login required

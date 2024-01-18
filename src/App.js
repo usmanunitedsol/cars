@@ -11,6 +11,7 @@ import Categories from './components/Categories/index'
 import { useSelector } from 'react-redux';
 import Addcategory from './components/Categories/addcategory';
 import Cars from './components/Cars';
+import AddCar from './components/Cars/addcar';
 
 function App() {
   const getSomeValue = (user) => user.user;
@@ -29,6 +30,7 @@ function App() {
         <Route path='/Categories' element={<Categories/>} />
         <Route path='/addcategory' element={<Addcategory/>} />
         <Route path='/cars' element={<Cars/>} />
+        <Route path='/AddCar' element={<AddCar/>} />
       </Routes>  
     </Router>
     </>
