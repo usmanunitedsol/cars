@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { getcardetails } from '../../States/action-creaters';
+import { getcardetails, getcategories } from '../../States/action-creaters';
 
 const Registerecars = () => {
   const dispatch =useDispatch();
@@ -14,6 +14,7 @@ const Registerecars = () => {
   
   useEffect(() => {
     fetchcar();
+    fetchcategories();
 
     
 }, [])
@@ -38,6 +39,34 @@ const Registerecars = () => {
         dispatch(getcardetails(cars.cars));        
         // dispatch(getcategories(categories));
 
+
+        
+    } catch (error) {
+        console.error('Error during fetch:', error);
+        alert("Error occured")
+    }
+  }
+
+  const fetchcategories = async ()=>{
+    try {
+        const response =await fetch (`http://localhost:5000/api/cars/fetchcategories?userId=${userId}`,{
+            method:'GET',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+        })
+
+        if(!response.ok){
+            // Handle non-successful responses
+            console.error(`HTTP error! Status: ${response.status}`);
+            return;
+        }
+
+        const categories=await response.json();
+        console.log("categories here",categories);
+
+        dispatch(getcategories(categories));
+        
 
         
     } catch (error) {

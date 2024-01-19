@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 const Addcategory = () => {
@@ -10,6 +11,8 @@ const Addcategory = () => {
     const handleChange = (e) => {
         setCategory({ ...Categories, [e.target.name]: e.target.value });
       };
+    
+      const navgate=useNavigate();
 
       const handleOnSubmit = async (e) => {
      
@@ -29,6 +32,8 @@ const Addcategory = () => {
             console.log(json)
             alert('category added successfully')
             setCategory({title:""});
+
+            navgate('/Categories')
 
           } else {
             console.error('category add failed');

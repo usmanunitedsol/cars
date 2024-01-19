@@ -19,9 +19,7 @@ const AddCar = () => {
         setnewcar({ ...newcar, [e.target.name]: e.target.value });
       };
 
-    //   const handleCategoryChange = (e) => {
-    //     setCategory(e.target.value)
-    //   }
+
 
       const handleOnSubmit = async (e) => {
      
@@ -91,16 +89,7 @@ const AddCar = () => {
                     <label htmlFor="Email" className="w-1/3 mb-2 text-sm font-medium text-gray-900 ">
                          Category
                     </label>
-                    {/* <input
-                        onChange={handleChange}
-                        value={Categories.title}
-                        type="text"
-                        name="title" 
-                        id="title"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5 "
-                        placeholder="Car Category"
-                        required
-                    /> */}
+              
 
                     <select className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none block w-full p-2.5 hover:cursor-pointer' name='category' value={newcar.category}     onChange={handleChange}>
                         <option value="allcategory"  className='cursor-pointer'  selected >Select Category</option>

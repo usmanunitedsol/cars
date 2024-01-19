@@ -115,13 +115,18 @@ router.post('/addcar',[
     //delete a category info using:delete "/api/auth/deltecategory"
 //login required
 
-router.delete('/deletecar/:id',async(req,res)=>{
+router.delete('/deletecar/:id',fetchuser, async(req,res)=>{
   try {
+      const  userId=req.user.id;
       const catId = req.params.id;
       console.log('catId ', catId)
-      const deletedcar=await Cars.deleteOne( {'registration_num' : catId})
-      console.log("Deleted car",deletedcar);
-       return  res.json({deletedcar}); 
+      const deletedCar = await Cars.findOneAndDelete({ 'registration_num': catId });
+        console.log(deletedCar)
+      // Now, retrieve the remaining cars after deletion
+     return res.json(await Cars.find({ 'user': userId }));
+      // console.log("user id", userId)
+      // console.log("Car deleted and remining cars",remainingCars);
+      //  return  res.json({remainingCars}); 
     
 
   } catch (error) {
@@ -134,42 +139,38 @@ router.delete('/deletecar/:id',async(req,res)=>{
   //update a car info using:PUT "/api/auth/getuser"
 //login required
 
-router.put('/updatecar/:id',async(req,res)=>{
+router.put('/updatecar/:id', fetchuser, async (req, res) => {
   try {
+    const userId = req.user.id;
     const catId = req.params.id;
-    console.log("param id", catId)
-    const {category,car,color,model,make,registration_num}=req.body
-    console.log("cat test", req.body)
-    const newcar={};
+    console.log("param id", catId);
+    const { category, car, color, model, make, registration_num } = req.body;
+    console.log("cat test", req.body);
+    const newcar = {};
 
     // Check if the new registration_num is already registered
     const existingCar = await Cars.findOne({ registration_num: registration_num });
-    if (existingCar && existingCar._id != catId) {
+    if (existingCar && existingCar._id.toString() !== catId) {
       // If the registration_num is already registered for another car
       return res.status(400).json({ error: "Registration number is already registered for another car" });
     }
- 
-    if(category){newcar.category=category}
-    if(car){newcar.car=car}
-    if(color){newcar.color=color}
-    if(model){newcar.model=model}
-    if(make){newcar.make=make}
-    if(registration_num){newcar.registration_num=registration_num}
 
-    
+    if (category) { newcar.category = category; }
+    if (car) { newcar.car = car; }
+    if (color) { newcar.color = color; }
+    if (model) { newcar.model = model; }
+    if (make) { newcar.make = make; }
+    if (registration_num) { newcar.registration_num = registration_num; }
 
-
-      const updatedcar=await  Cars.findByIdAndUpdate(catId,newcar,{ new: true })
-
-         console.error(updatedcar);
-       return  res.json({updatedcar}); 
-    
+    const updatedcar = await Cars.findByIdAndUpdate(catId, newcar, { new: true });
+    return res.json(await Cars.find({ 'user': userId }));
 
   } catch (error) {
     console.error(error.message);
-     res.status(500).json({error:"Some error occured"})
+    res.status(500).json({ error: "Some error occurred" });
   }
-})
+});
+
 
   //update a User info using:PUT "/api/auth/getuser"
 //login required

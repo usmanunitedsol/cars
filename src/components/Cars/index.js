@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getcardetails, getcategories } from '../../States/action-creaters';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-import Popup from './popup';
 import Carpopup from './popup';
 
 
@@ -25,55 +24,86 @@ const Cars = () => {
 
         const [filteredcar, setfilteredcar] = useState([car])
         const [isOpen, setIsOpen] = useState(false);
-        const [deletecategory, setdeletecategory] = useState(false);
-        const [categoryid, setcategoryid] = useState()
+        const [deletecar, setdeletecar] = useState(false);
+        const [car_id, setcarid] = useState()
         const [Categories, setCategory] = useState(""); 
-        const [updatecategory, setupdatecategory] = useState(false)
-
-        // const openPopup = async (catid) => {
-        //   setcategoryid(catid)
-        //   setIsOpen(true);
-        // };
+        const [updatecarstate, setupdateupdatecarstate] = useState(false);
+        const [updatecar, setupdatecar] = useState([])
+        const authCookie = document.cookie.split('; ').find(row => row.startsWith('auth_token='));
+        let auth_token;
+        if (authCookie) {
+          auth_token = authCookie.split('=')[1];
+          // Continue with the rest of your code using auth_token
+        } else {
+          // Handle the case where 'auth_token' cookie is not found
+          console.error('Error: auth_token cookie not found');
+        }
         
-        //   const closePopup =async () => {
-        //     try {
-   
-        //       const response = await fetch(`http://localhost:5000/api/cars/updatecategory/${categoryid}`, {
-        //         method: 'PUT',
-        //         headers: {
-        //           'Content-Type': 'application/json',
-        //           // Add any additional headers if needed
-        //         },
-        //         body: JSON.stringify({title:Categories.title}),
-        //       });
-          
-        //       if (!response.ok) {
-        //         // Handle non-successful responses
-        //         console.error(`HTTP error! Status: ${response.status}`);
-        //         return;
-        //       }
 
-        //       console.log("test res",response)
+
+        const openPopup = async (carid) => {
+          setcarid(carid)
+           console.log("check car id", carid) 
+          setIsOpen(true);
+        };
+        
+          const closePopup =async () => {
+            try {
+   
+              const response = await fetch(`http://localhost:5000/api/cars/updatecar/${car_id}`, {
+                method: 'PUT',
+                headers: {
+  
+ 
+                  'Content-Type': 'application/json',
+                  'auth-token': `${auth_token}`,
+                  // Add any additional headers if needed    
+                },
+
+
+                
+                body: JSON.stringify({car:updatecar.car,category:updatecar.category,color:updatecar.color,make:updatecar.make,model:updatecar.model,registration_num:updatecar.registration_num}),
+              });
+              
+              if (response.error) {
+                // Handle non-successful responses
+                console.error(` Status: ${response.error}`);  
+                alert(response.error)
+                // console.log(auth_token)
+                return;
+              }
           
-        //       const json = await response.json();
-        //       console.log("updated",json);
-        //       if (json) {
-        //         console.log(json);
-        //         alert("Successfully updated");
-        //         setupdatecategory(true)
-        //         setCategory({title:""})
+              // if (!response.ok) {
+              //   // Handle non-successful responses
+              //   console.error(`HTTP error! Status: ${response.status}`);
+              //   console.log(auth_token)
+              //   return;
+              // }
+
+              console.log("test res",response)
+          
+              const json = await response.json();
+              console.log("updated",json);
+              if (json.error) {
+                console.error('Update failed:', json.error); // Log the specific error from the server
+                alert(json.error)
            
-        //       } else {
-        //         console.error('Update failed:', json.error); // Log the specific error from the server
-        //         alert("update failed")
-        //       }
-        //     } catch (error) {
-        //       console.error('Error during fetch:', error);
-        //       alert("Error occured")
-        //     }
+              } else {
+           
+
+                console.log(json);
+                alert("Successfully updated");
+                dispatch(getcardetails(json)); 
+                setupdateupdatecarstate(true)
+                setupdatecar({})
+              }
+            } catch (error) {
+              console.error('Error during fetch:', error);
+              alert("Error occured")
+            }
          
-        //     setIsOpen(false);
-        //   };
+            setIsOpen(false);  
+          };
 
         const handleCategoryChange = (e) => {
           setCategory(e.target.value)
@@ -81,35 +111,39 @@ const Cars = () => {
         console.log("categories", Categories)
 
         const ondelete =async (catid) => {
-        //   try {
-        //     const response =await fetch (`http://localhost:5000/api/cars/deletecategory/${catid}`,{
-        //         method:'DELETE',
-        //         headers:{
-        //             'Content-Type': 'application/json',
-        //         },
-        //     })
+          try {
+            const response =await fetch (`http://localhost:5000/api/cars/deletecar/${catid}`,{
+                method:'DELETE',
+                headers:{
+                    'auth-token': ` ${auth_token}`,
+                },
+            })
 
-        //     if(!response.ok){
-        //         // Handle non-successful responses
-        //         console.error(`HTTP error! Status: ${response.status}`);
-        //         return;
-        //     }
+            if(!response.ok){
+                // Handle non-successful responses
+                console.error(`HTTP error! Status: ${response.status}`);
+                return;
+            }
+            const cars=await response.json()
                
-        //     alert("Category deleted")
-        //       setdeletecategory(true)
+            alert("Car deleted")
+            console.log("Remaining cars ", cars)
+            dispatch(getcardetails(cars)); 
+            setdeletecar(true)
 
             
-        // } catch (error) {
-        //     console.error('Error during fetch:', error);
-        //     alert("Error occured")
-        // }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+            alert("Error occured")
+        }
         };
     
-      // useEffect(() => {
-      //        fetchcar();
-
+      useEffect(() => {
+          setfilteredcar(car)
+          setdeletecar(false)
+          setupdateupdatecarstate(false)
              
-      // }, [])
+      }, [deletecar,updatecarstate])
 
       useEffect(() => {
           const result= car.filter((cars)=>{
@@ -171,11 +205,11 @@ const Cars = () => {
           name: 'Action',
           cell: row =>  
           <div className='flex gap-2'>
-            <button   > 
+            <button  onClick={() => openPopup(row.carid)}  > 
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z"/></svg>
             </button>
 
-            <button  ><svg
+            <button onClick={() => ondelete(row.registration_num)} ><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               width="24"
@@ -232,7 +266,7 @@ const Cars = () => {
            subHeaderComponent={ <input type='text' placeholder='Seach here' onChange={(e)=>setsearch(e.target.value)} value={search} className='w-1/4 border p-3 outline-none rounded-lg'/>}
            />
          </div>
-         <Carpopup  />
+         <Carpopup   isOpen={isOpen} setupdatecar={setupdatecar} updatecar={updatecar} closePopup={closePopup} />
     </div>
     
   );
